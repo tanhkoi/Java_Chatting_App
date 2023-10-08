@@ -25,11 +25,10 @@ public class Client implements Runnable {
             inputHandler inputHandler = new inputHandler();
             Thread t = new Thread(inputHandler);
             t.start();
-
+            
             String inMess;
             while ((inMess = in.readLine()) != null) {
-                System.out.println(inMess + " from server");
-                // TODO: send the mess to text area
+                System.out.println(inMess);
             }
         } catch (IOException e) {
             shutdown();
@@ -71,35 +70,6 @@ public class Client implements Runnable {
         }
     }
 
-//    public void sendMessage(String message) {
-//        if (out != null) {
-//            out.println(message);
-//        }
-//    }
-//
-//    class inputHandler implements Runnable {
-//
-//        @Override
-//        public void run() {
-//            try {
-//                BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
-//                while (!done) {
-//                    String mess = inReader.readLine();
-//                    if (mess.equals("/quit")) {
-//                        inReader.close();
-//                        shutdown();
-//                    } else {
-//                        // Send the message to the server
-//                        out.println(mess);
-//                        // Update the chat window with the sent message
-//                        frmChat.this.updateChat("You: " + mess);
-//                    }
-//                }
-//            } catch (IOException e) {
-//                shutdown();
-//            }
-//        }
-//    }
     public static void main(String[] args) {
         Client client = new Client();
         client.run();

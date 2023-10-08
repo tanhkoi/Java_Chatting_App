@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 
 public class Server implements Runnable {
 
-    private final ArrayList<ConnectionHandler> connections;
+    private ArrayList<ConnectionHandler> connections;
     private ServerSocket server;
     private boolean done;
     private ExecutorService pool;
@@ -28,6 +28,7 @@ public class Server implements Runnable {
             pool = Executors.newCachedThreadPool();
             while (!done) {
                 Socket client = server.accept();
+               
                 ConnectionHandler handler = new ConnectionHandler(client);
                 connections.add(handler);
                 pool.execute(handler);
@@ -61,7 +62,7 @@ public class Server implements Runnable {
 
     class ConnectionHandler implements Runnable {
 
-        private final Socket client;
+        private Socket client;
         private BufferedReader in;
         private PrintWriter out;
         private String nickname;
@@ -73,34 +74,22 @@ public class Server implements Runnable {
         @Override
         public void run() {
             try {
-                
+
                 // Send data to client
                 out = new PrintWriter(client.getOutputStream(), true);
                 // Get data from client
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-                out.println("Nhap mot nickname: ");
-                nickname = in.readLine(); // TODO: check all cases
-
+                // TODO: check all cases
+                nickname = in.readLine();
                 System.out.println(nickname + " da ket noi!");
                 broadcast(nickname + " tham gia doan chat!");
 
                 String mess;
                 while ((mess = in.readLine()) != null) {
-                    if (mess.startsWith("/nick ")) {
-                        String[] messSplit = mess.split(" ", 2);
-                        if (messSplit.length == 2) {
-                            broadcast(nickname + " thay doi nickname cua ho thanh " + messSplit[1]);
-                            System.out.println(nickname + " thay doi nickname cua ho thanh " + messSplit[1]);
-                            nickname = messSplit[1];
-                            out.println("Thay doi thanh cong: " + nickname);
-                        } else {
-                            out.println("Nickname khong hop le!");
-                        }
-                    } else if (mess.startsWith("/quit")) {
-                        broadcast(nickname + " roi doan chat!");
+                    if (mess.startsWith("/quit")) {
+                        broadcast(nickname + " da thoat group chat!");
                     } else {
-                        //
                         broadcast(nickname + ": " + mess);
                     }
                 }
@@ -130,4 +119,43 @@ public class Server implements Runnable {
         Server server = new Server();
         server.run();
     }
+
+//        @Override
+//        public void run() {
+//            try {
+//                
+//                // Send data to client
+//                out = new PrintWriter(client.getOutputStream(), true);
+//                // Get data from client
+//                in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+//
+//                out.println("Nhap mot nickname: ");
+//                nickname = in.readLine(); // TODO: check all cases
+//
+//                System.out.println(nickname + " da ket noi!");
+//                broadcast(nickname + " tham gia doan chat!");
+//
+//                String mess;
+//                while ((mess = in.readLine()) != null) {
+//                    if (mess.startsWith("/nick ")) {
+//                        String[] messSplit = mess.split(" ", 2);
+//                        if (messSplit.length == 2) {
+//                            broadcast(nickname + " thay doi nickname cua ho thanh " + messSplit[1]);
+//                            System.out.println(nickname + " thay doi nickname cua ho thanh " + messSplit[1]);
+//                            nickname = messSplit[1];
+//                            out.println("Thay doi thanh cong: " + nickname);
+//                        } else {
+//                            out.println("Nickname khong hop le!");
+//                        }
+//                    } else if (mess.startsWith("/quit")) {
+//                        broadcast(nickname + " roi doan chat!");
+//                    } else {
+//                        //
+//                        broadcast(nickname + ": " + mess);
+//                    }
+//                }
+//            } catch (IOException ex) {
+//                shutdown();
+//            }
+//        }
 }
