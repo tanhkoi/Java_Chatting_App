@@ -1,17 +1,6 @@
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
+public class frmChat extends javax.swing.JFrame {
 
-public class frmChat extends javax.swing.JFrame implements Runnable {
-
-    private Socket client;
-    private BufferedReader in;
-    private PrintWriter out;
-    private boolean done;
-    
     public frmChat() {
         initComponents();
     }
@@ -23,22 +12,23 @@ public class frmChat extends javax.swing.JFrame implements Runnable {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        txtGroupMess = new javax.swing.JTextArea();
         btnSend = new javax.swing.JButton();
         txtMessBox = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnVoice = new javax.swing.JButton();
+        btnFile = new javax.swing.JButton();
+        btnImg = new javax.swing.JButton();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Client-Chat");
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        txtGroupMess.setColumns(20);
+        txtGroupMess.setRows(5);
+        jScrollPane2.setViewportView(txtGroupMess);
 
         btnSend.setBackground(new java.awt.Color(204, 204, 204));
         btnSend.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/baseline_send_white_24dp.png"))); // NOI18N
@@ -48,16 +38,16 @@ public class frmChat extends javax.swing.JFrame implements Runnable {
             }
         });
 
-        txtMessBox.setForeground(new java.awt.Color(255, 255, 255));
+        txtMessBox.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        jButton3.setBackground(new java.awt.Color(204, 204, 204));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/voice1x.png"))); // NOI18N
+        btnVoice.setBackground(new java.awt.Color(204, 204, 204));
+        btnVoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/voice1x.png"))); // NOI18N
 
-        jButton4.setBackground(new java.awt.Color(204, 204, 204));
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/folder1x.png"))); // NOI18N
+        btnFile.setBackground(new java.awt.Color(204, 204, 204));
+        btnFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/folder1x.png"))); // NOI18N
 
-        jButton5.setBackground(new java.awt.Color(204, 204, 204));
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/baseline_image_white_24dp.png"))); // NOI18N
+        btnImg.setBackground(new java.awt.Color(204, 204, 204));
+        btnImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/baseline_image_white_24dp.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,19 +59,19 @@ public class frmChat extends javax.swing.JFrame implements Runnable {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton4)
+                                .addComponent(btnFile)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 324, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtMessBox, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnSend, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
+                                .addComponent(btnImg))
+                            .addComponent(txtMessBox, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))))
+                            .addComponent(btnVoice, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSend)))
                 .addGap(14, 14, 14))
         );
         layout.setVerticalGroup(
@@ -90,14 +80,14 @@ public class frmChat extends javax.swing.JFrame implements Runnable {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnFile, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnImg, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnVoice, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtMessBox, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
-                    .addComponent(btnSend, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(txtMessBox, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                    .addComponent(btnSend, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -129,71 +119,15 @@ public class frmChat extends javax.swing.JFrame implements Runnable {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFile;
+    private javax.swing.JButton btnImg;
     private javax.swing.JButton btnSend;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton btnVoice;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea txtGroupMess;
     private javax.swing.JTextField txtMessBox;
     // End of variables declaration//GEN-END:variables
 
-    
-
-    @Override
-    public void run() {
-        try {
-            client = new Socket("127.0.0.1", 1234);
-            out = new PrintWriter(client.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-
-            inputHandler inputHandler = new inputHandler();
-            Thread t = new Thread(inputHandler);
-            t.start();
-
-            String inMess;
-            while ((inMess = in.readLine()) != null) {
-                System.out.println(inMess);
-            }
-        } catch (IOException e) {
-            shutdown();
-        }
-
-    }
-
-    public void shutdown() {
-        done = true;
-        try {
-            in.close();
-            out.close();
-            if (!client.isClosed()) {
-                client.close();
-            }
-        } catch (IOException e) {
-            // ignore
-        }
-    }
-
-    class inputHandler implements Runnable {
-
-        @Override
-        public void run() {
-            try {
-                BufferedReader inReader = new BufferedReader(new InputStreamReader(System.in));
-                while (!done) {
-                    String mess = inReader.readLine();
-                    if (mess.equals("/quit")) {
-                        inReader.close();
-                        shutdown();
-                    } else {
-                        out.println(mess);
-                    }
-                }
-            } catch (IOException e) {
-                shutdown();
-            }
-        }
-    }
 }

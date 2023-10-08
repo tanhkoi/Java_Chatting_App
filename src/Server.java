@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,7 +11,7 @@ import java.util.concurrent.Executors;
 
 public class Server implements Runnable {
 
-    private ArrayList<ConnectionHandler> connections;
+    private final ArrayList<ConnectionHandler> connections;
     private ServerSocket server;
     private boolean done;
     private ExecutorService pool;
@@ -59,7 +60,8 @@ public class Server implements Runnable {
     }
 
     class ConnectionHandler implements Runnable {
-        private Socket client;
+
+        private final Socket client;
         private BufferedReader in;
         private PrintWriter out;
         private String nickname;
@@ -73,12 +75,13 @@ public class Server implements Runnable {
             try {
                 out = new PrintWriter(client.getOutputStream(), true);
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+
                 out.println("Please enter a nickname");
                 nickname = in.readLine(); // TODO: check all cases
-                
+
                 System.out.println(nickname + " connected!");
                 broadcast(nickname + " joined the chat!");
-                
+
                 String mess;
                 while ((mess = in.readLine()) != null) {
                     if (mess.startsWith("/nick ")) {
@@ -98,7 +101,7 @@ public class Server implements Runnable {
                         broadcast(nickname + ": " + mess);
                     }
                 }
-            } catch (Exception ex) {
+            } catch (IOException ex) {
                 shutdown();
             }
         }
