@@ -73,31 +73,34 @@ public class Server implements Runnable {
         @Override
         public void run() {
             try {
+                
+                // Send data to client
                 out = new PrintWriter(client.getOutputStream(), true);
+                // Get data from client
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-                out.println("Please enter a nickname");
+                out.println("Nhap mot nickname: ");
                 nickname = in.readLine(); // TODO: check all cases
 
-                System.out.println(nickname + " connected!");
-                broadcast(nickname + " joined the chat!");
+                System.out.println(nickname + " da ket noi!");
+                broadcast(nickname + " tham gia doan chat!");
 
                 String mess;
                 while ((mess = in.readLine()) != null) {
                     if (mess.startsWith("/nick ")) {
                         String[] messSplit = mess.split(" ", 2);
                         if (messSplit.length == 2) {
-                            broadcast(nickname + " renamed themselves to " + messSplit[1]);
-                            System.out.println(nickname + " changed themselves to " + messSplit[1]);
+                            broadcast(nickname + " thay doi nickname cua ho thanh " + messSplit[1]);
+                            System.out.println(nickname + " thay doi nickname cua ho thanh " + messSplit[1]);
                             nickname = messSplit[1];
-                            out.println("Successfully changed nickname to " + nickname);
+                            out.println("Thay doi thanh cong: " + nickname);
                         } else {
-                            out.println("No nickname provided!");
+                            out.println("Nickname khong hop le!");
                         }
                     } else if (mess.startsWith("/quit")) {
-                        broadcast(nickname + " left the chat!");
-                        shutdown();
+                        broadcast(nickname + " roi doan chat!");
                     } else {
+                        //
                         broadcast(nickname + ": " + mess);
                     }
                 }

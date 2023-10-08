@@ -1,8 +1,13 @@
 
 public class frmChat extends javax.swing.JFrame {
 
+    private final Client chatClient;
+
     public frmChat() {
         initComponents();
+        chatClient = new Client();
+        Thread clientThread = new Thread(chatClient);
+        clientThread.start();
     }
 
     @SuppressWarnings("unchecked")
@@ -95,9 +100,15 @@ public class frmChat extends javax.swing.JFrame {
 
 
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
-
+        String message = txtMessBox.getText();
+        // Send the message to server
+        txtMessBox.setText("");
 
     }//GEN-LAST:event_btnSendActionPerformed
+
+    public void updateChat(String message) {
+        txtGroupMess.append(message + "\n"); // Append the message to the JTextArea
+    }
 
     public static void main(String args[]) {
         try {
@@ -129,5 +140,4 @@ public class frmChat extends javax.swing.JFrame {
     private javax.swing.JTextArea txtGroupMess;
     private javax.swing.JTextField txtMessBox;
     // End of variables declaration//GEN-END:variables
-
 }
