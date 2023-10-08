@@ -26,5 +26,5 @@ replay_pid*
 # bonus
 .idea
 *.iml
-build
-*/nbproject/private/
+build/
+nbproject/

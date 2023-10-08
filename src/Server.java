@@ -75,12 +75,13 @@ public class Server implements Runnable {
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 out.println("Please enter a nickname");
                 nickname = in.readLine(); // TODO: check all cases
+                
                 System.out.println(nickname + " connected!");
                 broadcast(nickname + " joined the chat!");
+                
                 String mess;
                 while ((mess = in.readLine()) != null) {
                     if (mess.startsWith("/nick ")) {
-                        // TODO: handle nickname
                         String[] messSplit = mess.split(" ", 2);
                         if (messSplit.length == 2) {
                             broadcast(nickname + " renamed themselves to " + messSplit[1]);
@@ -91,7 +92,6 @@ public class Server implements Runnable {
                             out.println("No nickname provided!");
                         }
                     } else if (mess.startsWith("/quit")) {
-                        // TODO: quit
                         broadcast(nickname + " left the chat!");
                         shutdown();
                     } else {

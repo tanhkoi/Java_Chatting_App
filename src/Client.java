@@ -26,7 +26,6 @@ public class Client implements Runnable {
                 System.out.println(inMess);
             }
         } catch (IOException e) {
-            // TODO: handle
             shutdown();
         }
     }
@@ -60,14 +59,13 @@ public class Client implements Runnable {
                     }
                 }
             } catch (IOException e) {
-                // TODO: handle
                 shutdown();
             }
         }
     }
 
-    public static void main(String[] args) {
-        Client client = new Client();
-        client.run();
-    }
+//    public static void main(String[] args) {
+//        Client client = new Client();
+//        client.run();
+//    }
 }
