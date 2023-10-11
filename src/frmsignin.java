@@ -28,8 +28,8 @@ public class frmsignin extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jTextField1 = new javax.swing.JTextField();
+        txtPassword = new javax.swing.JPasswordField();
+        txtUsername = new javax.swing.JTextField();
         bttDangKy = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -55,13 +55,18 @@ public class frmsignin extends javax.swing.JFrame {
         jLabel4.setText("Chat Room");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 260, 80));
 
-        jPasswordField1.setToolTipText("");
-        getContentPane().add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 110, 200, 30));
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 50, 200, 30));
+        txtPassword.setToolTipText("");
+        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 110, 200, 30));
+        getContentPane().add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 50, 200, 30));
 
         bttDangKy.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bttDangKy.setText("Đăng ký");
         bttDangKy.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bttDangKy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttDangKyActionPerformed(evt);
+            }
+        });
         getContentPane().add(bttDangKy, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 190, 110, 40));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
@@ -83,6 +88,11 @@ public class frmsignin extends javax.swing.JFrame {
         bttDangNhap.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bttDangNhap.setText("Đăng nhập");
         bttDangNhap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bttDangNhap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttDangNhapActionPerformed(evt);
+            }
+        });
         getContentPane().add(bttDangNhap, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 190, 110, 40));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/nentoi.jpg"))); // NOI18N
@@ -90,6 +100,24 @@ public class frmsignin extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void bttDangNhapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttDangNhapActionPerformed
+        MongoDBAccess mgDB = new MongoDBAccess();
+        char[] password = txtPassword.getPassword();
+        int loginCode = mgDB.Login(txtUsername.getText(), new String(password));
+        if (loginCode == 1) {
+            // TODO: dang nhap thanh cong
+        } else if (loginCode == -1) {
+            // TODO: sai mat khau
+        } else if (loginCode == -2) {
+            // TODO: sai uername
+        }
+    }//GEN-LAST:event_bttDangNhapActionPerformed
+
+    private void bttDangKyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttDangKyActionPerformed
+        frmsignup frmsu = new frmsignup();
+        frmsu.setVisible(true);
+    }//GEN-LAST:event_bttDangKyActionPerformed
 
     /**
      * @param args the command line arguments
@@ -136,7 +164,7 @@ public class frmsignin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JPasswordField txtPassword;
+    private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 }
