@@ -77,7 +77,7 @@ public class Server implements Runnable {
 
                 // Send data to client
                 out = new PrintWriter(client.getOutputStream(), true);
-                // Get data from client
+                // Recive data from client
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
                 // TODO: check all cases

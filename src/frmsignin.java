@@ -43,47 +43,50 @@ public class frmsignin extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Tên đăng nhập");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 70, 130, 31));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, 130, 31));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Mật khẩu");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 130, 113, 31));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 110, 113, 31));
 
         jLabel4.setFont(new java.awt.Font("StarsStripes", 0, 48)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 255, 204));
-        jLabel4.setText("Chatting");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 260, 80));
+        jLabel4.setText("Chat Room");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 260, 80));
 
-        jPasswordField1.setText("jPasswordField1");
-        getContentPane().add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 130, 200, 30));
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 70, 200, 30));
+        jPasswordField1.setToolTipText("");
+        getContentPane().add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 110, 200, 30));
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 50, 200, 30));
 
         bttDangKy.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bttDangKy.setText("Đăng ký");
-        getContentPane().add(bttDangKy, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 220, 110, 40));
+        bttDangKy.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(bttDangKy, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 190, 110, 40));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Giúp bạn kết nối ");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 300, 50));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 300, 50));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Và chia sẻ đến mọi người");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, 330, 50));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 330, 50));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("quên mật khẩu ?");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 270, 130, 40));
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 250, 130, 40));
 
         bttDangNhap.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         bttDangNhap.setText("Đăng nhập");
-        getContentPane().add(bttDangNhap, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 220, 110, 40));
+        bttDangNhap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        getContentPane().add(bttDangNhap, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 190, 110, 40));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/nentoi.jpg"))); // NOI18N
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 870, 390));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 340));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
