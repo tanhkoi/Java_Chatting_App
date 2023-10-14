@@ -1,14 +1,16 @@
+package frm;
 
-import java.awt.BorderLayout;
+
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
+import java.awt.event.KeyEvent;
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import javax.swing.border.BevelBorder;
 
 public class frmChat extends javax.swing.JFrame {
 
@@ -49,6 +51,8 @@ public class frmChat extends javax.swing.JFrame {
                 while ((message = in.readLine()) != null) {
 
                     panelTextBox.add(messFrame(message));
+//                    JLabel myLabel = new JLabel(message);
+//                    myLabel.setBorder(new CustomLabelBorder(Color.RED));
                     panelTextBox.revalidate();
                     panelTextBox.repaint();
 
@@ -105,6 +109,11 @@ public class frmChat extends javax.swing.JFrame {
         });
 
         taBox.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        taBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                taBoxKeyPressed(evt);
+            }
+        });
 
         btnVoice.setBackground(new java.awt.Color(0, 0, 0));
         btnVoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/voice1x.png"))); // NOI18N
@@ -124,7 +133,7 @@ public class frmChat extends javax.swing.JFrame {
         panelOnline.setLayout(panelOnlineLayout);
         panelOnlineLayout.setHorizontalGroup(
             panelOnlineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 116, Short.MAX_VALUE)
         );
         panelOnlineLayout.setVerticalGroup(
             panelOnlineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,7 +149,7 @@ public class frmChat extends javax.swing.JFrame {
         panelTextBox.setLayout(panelTextBoxLayout);
         panelTextBoxLayout.setHorizontalGroup(
             panelTextBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 369, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         panelTextBoxLayout.setVerticalGroup(
             panelTextBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,34 +163,30 @@ public class frmChat extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(taBox, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnSend))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(13, 13, 13)
-                                .addComponent(btnFile)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnImg)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnVoice))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(68, 68, 68)
-                                .addComponent(panelTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(14, 14, 14))
+                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(panelOnline, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(389, 389, 389))))
+                        .addGap(6, 6, 6)
+                        .addComponent(panelOnline, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(taBox, javax.swing.GroupLayout.PREFERRED_SIZE, 687, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addComponent(btnSend))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(btnFile)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnImg)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnVoice))
+                    .addComponent(panelTextBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(12, Short.MAX_VALUE)
+                .addContainerGap(54, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -212,6 +217,12 @@ public class frmChat extends javax.swing.JFrame {
             taBox.requestFocus();
         }
     }//GEN-LAST:event_btnSendActionPerformed
+
+    private void taBoxKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_taBoxKeyPressed
+        if (KeyEvent.VK_ENTER == evt.getKeyCode()) {
+            btnSend.doClick();
+        }
+    }//GEN-LAST:event_taBoxKeyPressed
 
     public static void main(String args[]) {
         try {
