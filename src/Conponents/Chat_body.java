@@ -11,10 +11,10 @@ public class Chat_body extends javax.swing.JPanel {
     public Chat_body() {
         initComponents();
         init();
-        addItemLeft("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Lorem");
-        addItemLeft("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Lorem");
+//        addItemLeft("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Lorem");
+//        addItemLeft("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Lorem");
         addItemLeft("Lorem Ipsum is simply dummy text of the printing and typesetting industry.", "Lorem", new ImageIcon(getClass().getResource("/image/Nen.jpg")), new ImageIcon(getClass().getResource("/image/Nen.jpg")));
-
+        addItemFile("", "Lorem", "my doc.pdf", "1 MB");
     }
 
     private void init() {
@@ -34,6 +34,17 @@ public class Chat_body extends javax.swing.JPanel {
         body.revalidate();
     }
 
+    public void addItemFile(String text, String user, String fileName, String fileSize) {
+        Chat_left_with_profile item = new Chat_left_with_profile();
+        item.setText(text);
+        item.setFile(fileName, fileSize);
+        item.setTime();
+        item.setUserProfile(user);
+        body.add(item, "wrap, w 100::80%");
+        body.repaint();
+        body.revalidate();
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -42,6 +53,7 @@ public class Chat_body extends javax.swing.JPanel {
         body = new javax.swing.JPanel();
 
         sp.setBackground(new java.awt.Color(255, 255, 255));
+        sp.setAutoscrolls(true);
 
         body.setBackground(new java.awt.Color(255, 255, 255));
 

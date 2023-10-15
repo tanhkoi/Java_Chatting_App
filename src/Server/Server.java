@@ -46,6 +46,14 @@ public class Server implements Runnable {
         }
     }
 
+    public void broadcastIMG(){
+        for (ConnectionHandler ch : connections) {
+            if (ch != null) {
+                ch.sendIMG();
+            }
+        }
+    }
+    
     public void shutdown() {
         try {
             done = true;
@@ -67,15 +75,15 @@ public class Server implements Runnable {
         private PrintWriter out;
         private String nickname;
 
-        public ConnectionHandler(Socket socket) {
-            this.client = socket;
+        public ConnectionHandler(Socket client) {
+            this.client = client;
         }
 
         @Override
         public void run() {
             try {
 
-                // Send data to client
+                // Send data to clients
                 out = new PrintWriter(client.getOutputStream(), true);
                 // Recive data from client
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -103,6 +111,10 @@ public class Server implements Runnable {
             out.println(mess);
         }
 
+        public void sendIMG() {
+            out.println();
+        }
+        
         public void shutdown() {
             try {
                 in.close();

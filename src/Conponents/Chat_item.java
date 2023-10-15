@@ -61,6 +61,16 @@ public class Chat_item extends javax.swing.JPanel {
         layer.add(chatImage);
         add(layer);
     }
+    
+    public void setFile(String fileName, String fileSize) {
+        JLayeredPane layer = new JLayeredPane();
+        layer.setLayout(new FlowLayout(FlowLayout.LEFT));
+        layer.setBorder(new EmptyBorder(0, 5, 0, 5));
+        Chat_file chatFile = new Chat_file();
+        chatFile.setFile(fileName, fileSize);
+        layer.add(chatFile);
+        add(layer);
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
