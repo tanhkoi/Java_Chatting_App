@@ -31,6 +31,10 @@ public class Chat_left_with_profile extends javax.swing.JLayeredPane {
         txt.setImage(false, image);
     }
     
+    public void setFile(String fileName, String fileSize) {
+        txt.setFile(fileName, fileSize);
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

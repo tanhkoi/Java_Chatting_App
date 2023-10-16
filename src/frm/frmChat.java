@@ -9,24 +9,34 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class frmChat extends javax.swing.JFrame {
-    
+
     private Socket socket;
     private PrintWriter out;
     private BufferedReader in;
-    private final String username;
-    
+    private String username;
+
     public frmChat() {
+        frmsignin signInForm = new frmsignin();
+        signInForm.setVisible(true);
+
+        signInForm.addLoginListener(new LoginListener() {
+            @Override
+            public void onLoginSuccess(String username) {
+                signInForm.dispose();
+                initializeChat(username);
+            }
+        });
+    }
+
+    private void initializeChat(String username) {
         initComponents();
-        username = JOptionPane.showInputDialog("Nhap nickname:");
-        if (username == null || username.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nickname khong duoc de trong...");
-            System.exit(0);
-        }
+        
+        this.username = username;
         connectToServer();
         setTitle("Chat Client - " + username);
         receiveMessages();
     }
-    
+
     private void receiveMessages() {
         Thread messageReceiver = new Thread(() -> {
             try {
@@ -41,7 +51,7 @@ public class frmChat extends javax.swing.JFrame {
         });
         messageReceiver.start();
     }
-    
+
     private void connectToServer() {
         try {
             socket = new Socket("127.0.0.1", 1234);
@@ -54,7 +64,7 @@ public class frmChat extends javax.swing.JFrame {
             System.exit(1);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -91,11 +101,14 @@ public class frmChat extends javax.swing.JFrame {
 
         btnFile.setBackground(new java.awt.Color(0, 0, 0));
         btnFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/folder1x.png"))); // NOI18N
-        btnFile.setEnabled(false);
 
         btnImg.setBackground(new java.awt.Color(0, 0, 0));
         btnImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/baseline_image_white_24dp.png"))); // NOI18N
-        btnImg.setEnabled(false);
+        btnImg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImgActionPerformed(evt);
+            }
+        });
 
         panelOnline.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -168,7 +181,7 @@ public class frmChat extends javax.swing.JFrame {
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
         String message = taBox.getText().trim();
         if (!message.isEmpty()) {
-            out.println(message);
+            out.println("Text<" + message);
             taBox.setText("");
             taBox.requestFocus();
         }
@@ -179,7 +192,11 @@ public class frmChat extends javax.swing.JFrame {
             btnSend.doClick();
         }
     }//GEN-LAST:event_taBoxKeyPressed
-    
+
+    private void btnImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImgActionPerformed
+
+    }//GEN-LAST:event_btnImgActionPerformed
+
     public static void main(String args[]) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -191,7 +208,7 @@ public class frmChat extends javax.swing.JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(frmChat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        
+
         java.awt.EventQueue.invokeLater(() -> {
             new frmChat().setVisible(true);
         });

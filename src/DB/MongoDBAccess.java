@@ -1,10 +1,10 @@
 package DB;
 
-
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import javax.swing.JOptionPane;
 import org.bson.Document;
 
 public class MongoDBAccess {
@@ -45,7 +45,7 @@ public class MongoDBAccess {
     }
 
     public int Register(String inputUsername, String email, String inputPassword) {
-        
+
         try (MongoClient mongoClient = MongoClients.create(connectionString)) {
             MongoDatabase database = mongoClient.getDatabase(databaseName);
             MongoCollection<Document> collection = database.getCollection(collectionName);
@@ -65,5 +65,4 @@ public class MongoDBAccess {
             return 1; // dang ky thanh cong
         }
     }
-
 }
