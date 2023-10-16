@@ -210,7 +210,7 @@ public class frmChat extends javax.swing.JFrame {
         }
 
         java.awt.EventQueue.invokeLater(() -> {
-            new frmChat().setVisible(true);
+            frmChat frm = new frmChat();
         });
     }
 
