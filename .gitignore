@@ -29,3 +29,7 @@ replay_pid*
 build/
 nbproject/
 out/
+
+# Ignore NetBeans project files
+/nbproject/private/private.xml
+/nbproject/project.properties

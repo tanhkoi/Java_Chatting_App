@@ -14,7 +14,7 @@ public class MongoDBAccess {
 
     public MongoDBAccess() {
         try {
-            connectionString = "mongodb+srv://admin:<admin>@cluster0.jyly0vf.mongodb.net/";
+            connectionString = "mongodb://localhost:27017";
             databaseName = "JavaChattingApp";
             collectionName = "Users";
         } catch (Exception e) {

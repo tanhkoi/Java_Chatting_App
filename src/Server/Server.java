@@ -1,14 +1,12 @@
 package Server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.io.*;
 
 public class Server implements Runnable {
 
@@ -38,7 +36,7 @@ public class Server implements Runnable {
         }
     }
 
-    public void broadcast(String mess) {
+    public void broadcast(String mess) throws IOException {
         for (ConnectionHandler ch : connections) {
             if (ch != null) {
                 ch.sendMess(mess);
@@ -46,21 +44,23 @@ public class Server implements Runnable {
         }
     }
 
-    public void broadcastIMG(){
+    public void broadcastIMG(byte[] filebytes) throws IOException {
         for (ConnectionHandler ch : connections) {
             if (ch != null) {
-                ch.sendIMG();
+                ch.sendIMG(filebytes);
             }
         }
     }
-    
+
     public void shutdown() {
         try {
             done = true;
-            if (!server.isClosed()) {
-                server.close();
-                for (ConnectionHandler ch : connections) {
-                    ch.shutdown();
+            if (server != null) {
+                if (!server.isClosed()) {
+                    server.close();
+                    for (ConnectionHandler ch : connections) {
+                        ch.shutdown();
+                    }
                 }
             }
         } catch (IOException e) {
@@ -71,8 +71,8 @@ public class Server implements Runnable {
     class ConnectionHandler implements Runnable {
 
         private Socket client;
-        private BufferedReader in;
-        private PrintWriter out;
+        private DataOutputStream dos;
+        private DataInputStream dis;
         private String nickname;
 
         public ConnectionHandler(Socket client) {
@@ -83,23 +83,33 @@ public class Server implements Runnable {
         public void run() {
             try {
 
-                // Send data to clients
-                out = new PrintWriter(client.getOutputStream(), true);
-                // Recive data from client
-                in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                dos = new DataOutputStream(client.getOutputStream());
+                dis = new DataInputStream(client.getInputStream());
 
-                // TODO: check all cases
-                nickname = in.readLine();
+                while (true) {
+                    String messageType = dis.readUTF();
+                    if (messageType.equals("text")) {
+                        String text = dis.readUTF();
+                        broadcast(text);
+                        System.out.println("Received text: " + text);
+                    } else if (messageType.equals("image")) {
+                        int length = dis.readInt();
+                        byte[] imageBytes = new byte[length];
+                        dis.readFully(imageBytes);
+                        broadcastIMG(imageBytes);
 
-                System.out.println(nickname + " da ket noi!");
-                broadcast(nickname + " tham gia doan chat!");
+                        System.out.println("Received image: received_image.png");
+                    } else if (messageType.equals("file")) {
+                        String filename = dis.readUTF();
+                        int length = dis.readInt();
+                        byte[] fileBytes = new byte[length];
+                        dis.readFully(fileBytes);
 
-                String mess;
-                while ((mess = in.readLine()) != null) {
-                    if (mess.startsWith("/quit")) {
-                        broadcast(nickname + " da thoat group chat!");
-                    } else {
-                        broadcast(mess);
+                        FileOutputStream fos = new FileOutputStream(filename);
+                        fos.write(fileBytes);
+                        fos.close();
+
+                        System.out.println("Received file: " + filename);
                     }
                 }
             } catch (IOException ex) {
@@ -107,18 +117,21 @@ public class Server implements Runnable {
             }
         }
 
-        public void sendMess(String mess) {
-            out.println(mess);
+        public void sendMess(String mess) throws IOException {
+            dos.writeUTF("text");
+            dos.writeUTF(mess);
         }
 
-        public void sendIMG() {
-            out.println();
+        public void sendIMG(byte[] fileBytes) throws IOException {
+            dos.writeUTF("image");
+            dos.writeInt(fileBytes.length);
+            dos.write(fileBytes);
         }
-        
+
         public void shutdown() {
             try {
-                in.close();
-                out.close();
+                dos.close();
+                dis.close();
                 if (!client.isClosed()) {
                     client.close();
                 }

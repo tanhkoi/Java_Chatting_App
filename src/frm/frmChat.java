@@ -1,18 +1,19 @@
 package frm;
 
+import java.io.*;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class frmChat extends javax.swing.JFrame {
 
     private Socket socket;
-    private PrintWriter out;
-    private BufferedReader in;
+    private DataOutputStream dos;
+    private DataInputStream dis;
     private String username;
 
     public frmChat() {
@@ -30,7 +31,7 @@ public class frmChat extends javax.swing.JFrame {
 
     private void initializeChat(String username) {
         initComponents();
-        
+        this.setVisible(true);
         this.username = username;
         connectToServer();
         setTitle("Chat Client - " + username);
@@ -40,13 +41,36 @@ public class frmChat extends javax.swing.JFrame {
     private void receiveMessages() {
         Thread messageReceiver = new Thread(() -> {
             try {
-                String message;
-                while ((message = in.readLine()) != null) {
-                    chatbody.addItemLeft(message, username);
+                String messageType;
+                while (true) {
+                    messageType = dis.readUTF();
+                    if (messageType.equals("text")) {
+                        String message = dis.readUTF();
+                        chatbody.addItemLeft(message, username);
+                        System.out.println("Received text: " + message);
+                    } else if (messageType.equals("image")) {
+                        int length = dis.readInt();
+                        byte[] imageBytes = new byte[length];
+                        dis.readFully(imageBytes);
+                        ImageIcon imageIcon = new ImageIcon(imageBytes);
+                        chatbody.addItemLeft("", username, imageIcon);
+
+                        System.out.println("Received image: received_image.png");
+                    } else if (messageType.equals("file")) {
+                        String filename = dis.readUTF();
+                        int length = dis.readInt();
+                        byte[] fileBytes = new byte[length];
+                        dis.readFully(fileBytes);
+
+                        FileOutputStream fos = new FileOutputStream(filename);
+                        fos.write(fileBytes);
+                        fos.close();
+
+                        System.out.println("Received file: " + filename);
+                    }
                 }
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Connection to server lost. Exiting...");
-                System.exit(1);
+                Logger.getLogger(frmChat.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
         messageReceiver.start();
@@ -55,9 +79,9 @@ public class frmChat extends javax.swing.JFrame {
     private void connectToServer() {
         try {
             socket = new Socket("127.0.0.1", 1234);
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out.println(username);
+            dos = new DataOutputStream(socket.getOutputStream());
+            dis = new DataInputStream(socket.getInputStream());
+            dos.writeUTF(username);
             taBox.requestFocus();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Error connecting to the server. Exiting...");
@@ -181,7 +205,12 @@ public class frmChat extends javax.swing.JFrame {
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
         String message = taBox.getText().trim();
         if (!message.isEmpty()) {
-            out.println("Text<" + message);
+            try {
+                dos.writeUTF("text");
+                dos.writeUTF(message);
+            } catch (Exception e) {
+                // TODO: handle
+            }
             taBox.setText("");
             taBox.requestFocus();
         }
@@ -194,7 +223,16 @@ public class frmChat extends javax.swing.JFrame {
     }//GEN-LAST:event_taBoxKeyPressed
 
     private void btnImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImgActionPerformed
-
+        try {
+            JFileChooser myFileChooser = new JFileChooser();
+            myFileChooser.showOpenDialog(btnSend);
+            dos.writeUTF("image");
+            byte[] imageBytes = Files.readAllBytes(new File(myFileChooser.getSelectedFile().getAbsolutePath()).toPath());
+            dos.writeInt(imageBytes.length);
+            dos.write(imageBytes);
+        } catch (Exception e) {
+            // TODO: handle
+        }
     }//GEN-LAST:event_btnImgActionPerformed
 
     public static void main(String args[]) {
