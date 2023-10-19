@@ -52,10 +52,10 @@ public class Server implements Runnable {
         }
     }
 
-    public void broadcastFile(byte[] filebytes, String username) throws IOException {
+    public void broadcastFile(byte[] filebytes, String username, String filename) throws IOException {
         for (ConnectionHandler ch : connections) {
             if (ch != null) {
-                ch.sendFile(filebytes, username);
+                ch.sendFile(filebytes, username, filename);
             }
         }
     }
@@ -118,7 +118,7 @@ public class Server implements Runnable {
                         int length = dis.readInt();
                         byte[] fileBytes = new byte[length];
                         dis.readFully(fileBytes);
-                        broadcast(filename, username);
+                        broadcastFile(fileBytes, username, filename);
                         System.out.println("Received file: " + filename);
 
                     }
@@ -141,9 +141,10 @@ public class Server implements Runnable {
             dos.write(fileBytes);
         }
 
-        public void sendFile(byte[] fileBytes, String username) throws IOException {
+        public void sendFile(byte[] fileBytes, String username, String filename) throws IOException {
             dos.writeUTF("file");
             dos.writeUTF(username);
+            dos.writeUTF(filename);
             dos.writeInt(fileBytes.length);
             dos.write(fileBytes);
         }
