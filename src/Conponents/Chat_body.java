@@ -1,6 +1,8 @@
 package Conponents;
 
 import java.awt.Color;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JScrollBar;
@@ -13,7 +15,7 @@ public class Chat_body extends javax.swing.JPanel {
         init();
 //        addItemLeft("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Lorem");
 //        addItemLeft("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", "Lorem");
-        addItemLeft("Lorem Ipsum is simply dummy text of the printing and typesetting industry.", "Lorem", new ImageIcon(getClass().getResource("/image/Nen.jpg")), new ImageIcon(getClass().getResource("/image/Nen.jpg")));
+        addItemLeft("Lorem Ipsum is simply dummy text of the printing and typesetting industry.", "Lorem", new ImageIcon(getClass().getResource("/image/Nen.jpg"))); //, new ImageIcon(getClass().getResource("/image/Nen.jpg"))
         addItemFile("", "Lorem", "my doc.pdf", "1 MB");
     }
 
@@ -21,6 +23,7 @@ public class Chat_body extends javax.swing.JPanel {
         body.setLayout(new MigLayout("fillx", "", "5[]5"));
         sp.setVerticalScrollBar(new JScrollBar());
         sp.getVerticalScrollBar().setBackground(Color.white);
+        sp.getVerticalScrollBar().setUnitIncrement(32);
     }
 
     public void addItemLeft(String text, String user, Icon... image) {

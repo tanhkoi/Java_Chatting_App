@@ -131,6 +131,9 @@
           <Image iconType="3" name="/image/folder1x.png"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFileActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnImg">
       <Properties>
@@ -173,6 +176,9 @@
       </Events>
     </Component>
     <Component class="Conponents.Chat_body" name="chatbody">
+      <Properties>
+        <Property name="autoscrolls" type="boolean" value="true"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

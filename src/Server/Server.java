@@ -36,18 +36,26 @@ public class Server implements Runnable {
         }
     }
 
-    public void broadcast(String mess) throws IOException {
+    public void broadcast(String mess, String username) throws IOException {
         for (ConnectionHandler ch : connections) {
             if (ch != null) {
-                ch.sendMess(mess);
+                ch.sendMess(mess, username);
             }
         }
     }
 
-    public void broadcastIMG(byte[] filebytes) throws IOException {
+    public void broadcastIMG(byte[] filebytes, String username) throws IOException {
         for (ConnectionHandler ch : connections) {
             if (ch != null) {
-                ch.sendIMG(filebytes);
+                ch.sendIMG(filebytes, username);
+            }
+        }
+    }
+
+    public void broadcastFile(byte[] filebytes, String username) throws IOException {
+        for (ConnectionHandler ch : connections) {
+            if (ch != null) {
+                ch.sendFile(filebytes, username);
             }
         }
     }
@@ -73,7 +81,6 @@ public class Server implements Runnable {
         private Socket client;
         private DataOutputStream dos;
         private DataInputStream dis;
-        private String nickname;
 
         public ConnectionHandler(Socket client) {
             this.client = client;
@@ -89,27 +96,31 @@ public class Server implements Runnable {
                 while (true) {
                     String messageType = dis.readUTF();
                     if (messageType.equals("text")) {
+
+                        String username = dis.readUTF();
                         String text = dis.readUTF();
-                        broadcast(text);
+                        broadcast(text, username);
                         System.out.println("Received text: " + text);
+
                     } else if (messageType.equals("image")) {
+
+                        String username = dis.readUTF();
                         int length = dis.readInt();
                         byte[] imageBytes = new byte[length];
                         dis.readFully(imageBytes);
-                        broadcastIMG(imageBytes);
-
+                        broadcastIMG(imageBytes, username);
                         System.out.println("Received image: received_image.png");
+
                     } else if (messageType.equals("file")) {
+
+                        String username = dis.readUTF();
                         String filename = dis.readUTF();
                         int length = dis.readInt();
                         byte[] fileBytes = new byte[length];
                         dis.readFully(fileBytes);
-
-                        FileOutputStream fos = new FileOutputStream(filename);
-                        fos.write(fileBytes);
-                        fos.close();
-
+                        broadcast(filename, username);
                         System.out.println("Received file: " + filename);
+
                     }
                 }
             } catch (IOException ex) {
@@ -117,13 +128,22 @@ public class Server implements Runnable {
             }
         }
 
-        public void sendMess(String mess) throws IOException {
+        public void sendMess(String mess, String username) throws IOException {
             dos.writeUTF("text");
+            dos.writeUTF(username);
             dos.writeUTF(mess);
         }
 
-        public void sendIMG(byte[] fileBytes) throws IOException {
+        public void sendIMG(byte[] fileBytes, String username) throws IOException {
             dos.writeUTF("image");
+            dos.writeUTF(username);
+            dos.writeInt(fileBytes.length);
+            dos.write(fileBytes);
+        }
+
+        public void sendFile(byte[] fileBytes, String username) throws IOException {
+            dos.writeUTF("file");
+            dos.writeUTF(username);
             dos.writeInt(fileBytes.length);
             dos.write(fileBytes);
         }

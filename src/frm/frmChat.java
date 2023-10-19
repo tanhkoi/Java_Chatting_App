@@ -41,32 +41,36 @@ public class frmChat extends javax.swing.JFrame {
     private void receiveMessages() {
         Thread messageReceiver = new Thread(() -> {
             try {
-                String messageType;
                 while (true) {
-                    messageType = dis.readUTF();
+                    String messageType = dis.readUTF();
                     if (messageType.equals("text")) {
+
+                        String username = dis.readUTF();
                         String message = dis.readUTF();
                         chatbody.addItemLeft(message, username);
                         System.out.println("Received text: " + message);
+
                     } else if (messageType.equals("image")) {
+
+                        String username = dis.readUTF();
                         int length = dis.readInt();
                         byte[] imageBytes = new byte[length];
                         dis.readFully(imageBytes);
                         ImageIcon imageIcon = new ImageIcon(imageBytes);
                         chatbody.addItemLeft("", username, imageIcon);
-
                         System.out.println("Received image: received_image.png");
+
                     } else if (messageType.equals("file")) {
+
+                        String username = dis.readUTF();
                         String filename = dis.readUTF();
                         int length = dis.readInt();
                         byte[] fileBytes = new byte[length];
                         dis.readFully(fileBytes);
-
-                        FileOutputStream fos = new FileOutputStream(filename);
-                        fos.write(fileBytes);
-                        fos.close();
-
+                        String formattedSize = formatFileSize(length);
+                        chatbody.addItemFile("", username, filename, formattedSize);
                         System.out.println("Received file: " + filename);
+
                     }
                 }
             } catch (IOException ex) {
@@ -81,7 +85,6 @@ public class frmChat extends javax.swing.JFrame {
             socket = new Socket("127.0.0.1", 1234);
             dos = new DataOutputStream(socket.getOutputStream());
             dis = new DataInputStream(socket.getInputStream());
-            dos.writeUTF(username);
             taBox.requestFocus();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Error connecting to the server. Exiting...");
@@ -125,6 +128,11 @@ public class frmChat extends javax.swing.JFrame {
 
         btnFile.setBackground(new java.awt.Color(0, 0, 0));
         btnFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/folder1x.png"))); // NOI18N
+        btnFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFileActionPerformed(evt);
+            }
+        });
 
         btnImg.setBackground(new java.awt.Color(0, 0, 0));
         btnImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/baseline_image_white_24dp.png"))); // NOI18N
@@ -152,6 +160,8 @@ public class frmChat extends javax.swing.JFrame {
                 taBoxKeyPressed(evt);
             }
         });
+
+        chatbody.setAutoscrolls(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -207,6 +217,7 @@ public class frmChat extends javax.swing.JFrame {
         if (!message.isEmpty()) {
             try {
                 dos.writeUTF("text");
+                dos.writeUTF(username);
                 dos.writeUTF(message);
             } catch (Exception e) {
                 // TODO: handle
@@ -225,8 +236,9 @@ public class frmChat extends javax.swing.JFrame {
     private void btnImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImgActionPerformed
         try {
             JFileChooser myFileChooser = new JFileChooser();
-            myFileChooser.showOpenDialog(btnSend);
+            myFileChooser.showOpenDialog(chatbody);
             dos.writeUTF("image");
+            dos.writeUTF(username);
             byte[] imageBytes = Files.readAllBytes(new File(myFileChooser.getSelectedFile().getAbsolutePath()).toPath());
             dos.writeInt(imageBytes.length);
             dos.write(imageBytes);
@@ -234,6 +246,20 @@ public class frmChat extends javax.swing.JFrame {
             // TODO: handle
         }
     }//GEN-LAST:event_btnImgActionPerformed
+
+    private void btnFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFileActionPerformed
+        try {
+            JFileChooser myFileChooser = new JFileChooser();
+            myFileChooser.showOpenDialog(chatbody);
+            dos.writeUTF("file");
+            dos.writeUTF(username);
+            byte[] fileBytes = Files.readAllBytes(new File(myFileChooser.getSelectedFile().getAbsolutePath()).toPath());
+            dos.writeInt(fileBytes.length);
+            dos.write(fileBytes);
+        } catch (Exception e) {
+            // TODO: handle
+        }
+    }//GEN-LAST:event_btnFileActionPerformed
 
     public static void main(String args[]) {
         try {
@@ -250,6 +276,18 @@ public class frmChat extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             frmChat frm = new frmChat();
         });
+    }
+
+    public static String formatFileSize(long sizeInBytes) {
+        if (sizeInBytes < 1024) {
+            return sizeInBytes + " B";
+        } else if (sizeInBytes < 1024 * 1024) {
+            return String.format("%.2f KB", (double) sizeInBytes / 1024);
+        } else if (sizeInBytes < 1024 * 1024 * 1024) {
+            return String.format("%.2f MB", (double) sizeInBytes / (1024 * 1024));
+        } else {
+            return String.format("%.2f GB", (double) sizeInBytes / (1024 * 1024 * 1024));
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
