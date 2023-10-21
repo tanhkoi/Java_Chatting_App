@@ -17,6 +17,7 @@ public class item_people extends javax.swing.JPanel {
         username = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         imageAvatar1.setImage(new javax.swing.ImageIcon(getClass().getResource("/image/user.png"))); // NOI18N
 

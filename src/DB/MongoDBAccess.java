@@ -3,7 +3,11 @@ package DB;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bson.Document;
 
 public class MongoDBAccess {
@@ -65,11 +69,53 @@ public class MongoDBAccess {
         }
     }
 
-    public int registerUser(String username, String email, String password) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<String> getOnlineUsers() {
+        List<String> onlineUsers = new ArrayList<>();
+
+        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase database = mongoClient.getDatabase("JavaChattingApp");
+            MongoCollection<Document> usersCollection = database.getCollection("Users");
+
+            Document query = new Document("isOnline", true);
+            try (MongoCursor<Document> cursor = usersCollection.find(query).iterator()) {
+                while (cursor.hasNext()) {
+                    Document user = cursor.next();
+                    onlineUsers.add(user.getString("username"));
+                }
+            }
+        }
+        return onlineUsers;
     }
 
-    public boolean saveUserData(String username, String email, String password) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void turnOffOnline(String username) {
+        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase database = mongoClient.getDatabase("JavaChattingApp");
+            MongoCollection<Document> collection = database.getCollection("Users");
+
+            Document userDocument = collection.find(new Document("username", username)).first();
+
+            if (userDocument != null) {
+                userDocument.put("isOnline", false);
+
+                collection.replaceOne(new Document("username", username), userDocument);
+            }
+        }
     }
+    
+    
+    public void turnOnOnline(String username) {
+        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase database = mongoClient.getDatabase("JavaChattingApp");
+            MongoCollection<Document> collection = database.getCollection("Users");
+
+            Document userDocument = collection.find(new Document("username", username)).first();
+
+            if (userDocument != null) {
+                userDocument.put("isOnline", true);
+
+                collection.replaceOne(new Document("username", username), userDocument);
+            }
+        }
+    }
+
 }

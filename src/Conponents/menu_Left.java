@@ -1,5 +1,6 @@
 package Conponents;
 
+import java.util.List;
 import net.miginfocom.swing.MigLayout;
 
 public class menu_Left extends javax.swing.JPanel {
@@ -11,13 +12,22 @@ public class menu_Left extends javax.swing.JPanel {
 
     private void init() {
         menuUser.setLayout(new MigLayout());
-        showPeople();
+//        showPeople();
     }
 
     private void showPeople() {
         for (int i = 0; i < 4; i++) {
             menuUser.add(new item_people("People " + i), "wrap");
         }
+    }
+
+    public void updateListUser(List<String> onlineUsers) {
+        menuUser.removeAll();
+        for (String user : onlineUsers) {
+            menuUser.add(new item_people(user), "wrap");
+        }
+        menuUser.repaint();
+        menuUser.revalidate();
     }
 
     @SuppressWarnings("unchecked")

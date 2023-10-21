@@ -35,6 +35,7 @@ public class frmsignin extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         bttDangNhap = new javax.swing.JButton();
+        lbThongbao = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -95,6 +96,11 @@ public class frmsignin extends javax.swing.JFrame {
         });
         getContentPane().add(bttDangNhap, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 190, 110, 40));
 
+        lbThongbao.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
+        lbThongbao.setForeground(java.awt.Color.red);
+        lbThongbao.setToolTipText("");
+        getContentPane().add(lbThongbao, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 160, -1, -1));
+
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/nentoi.jpg"))); // NOI18N
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 720, 330));
 
@@ -107,12 +113,11 @@ public class frmsignin extends javax.swing.JFrame {
         char[] password = txtPassword.getPassword();
         int loginCode = mgDB.Login(txtUsername.getText(), new String(password));
         if (loginCode == 1) {
-            // TODO: dang nhap thanh cong
             notifyLoginSuccess(txtUsername.getText());
         } else if (loginCode == -1) {
-            // TODO: sai mat khau
+            lbThongbao.setText("Sai mat khau!");
         } else if (loginCode == -2) {
-            // TODO: sai uername
+            lbThongbao.setText("Username khong ton tai!");
         }
     }//GEN-LAST:event_bttDangNhapActionPerformed
 
@@ -164,6 +169,7 @@ public class frmsignin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLayeredPane jLayeredPane1;
+    private javax.swing.JLabel lbThongbao;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables

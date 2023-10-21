@@ -157,7 +157,7 @@ public class Server implements Runnable {
                     client.close();
                 }
             } catch (IOException e) {
-                shutdown();
+                
             }
         }
     }

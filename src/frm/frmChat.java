@@ -1,11 +1,15 @@
 package frm;
 
+import DB.MongoDBAccess;
 import java.io.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,15 +33,46 @@ public class frmChat extends javax.swing.JFrame {
         });
     }
 
+    private void updateOnlineUsers() {
+        MongoDBAccess mb = new MongoDBAccess();
+        List<String> onlineUsers = mb.getOnlineUsers();
+        menuUser.updateListUser(onlineUsers);
+    }
+
+    Timer onlineUsersTimer = new Timer(1000, (e) -> {
+        updateOnlineUsers();
+    });
+
     private void initializeChat(String username) {
         initComponents();
         this.setVisible(true);
+
         this.username = username;
-        connectToServer();
         lbUsername.setText(username);
+
+        connectToServer();
+
         receiveMessages();
+
+        setOnline();
+        
+        onlineUsersTimer.start();
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                MongoDBAccess m = new MongoDBAccess();
+                m.turnOffOnline(username);
+            }
+        });
     }
 
+    private void setOnline() {
+        MongoDBAccess m = new MongoDBAccess();
+        m.turnOnOnline(username);
+    }
+
+    // xu li nhan mess tu server
     private void receiveMessages() {
         Thread messageReceiver = new Thread(() -> {
             try {
@@ -48,7 +83,7 @@ public class frmChat extends javax.swing.JFrame {
                         String username = dis.readUTF();
                         String message = dis.readUTF();
                         chatbody.addItemLeft(message, username);
-                        System.out.println("Received text: " + message);
+                        System.out.println("Received text" + message);
 
                     } else if (messageType.equals("image")) {
 
@@ -58,7 +93,7 @@ public class frmChat extends javax.swing.JFrame {
                         dis.readFully(imageBytes);
                         ImageIcon imageIcon = new ImageIcon(imageBytes);
                         chatbody.addItemLeft("", username, imageIcon);
-                        System.out.println("Received image: received_image.png");
+                        System.out.println("Received image");
 
                     } else if (messageType.equals("file")) {
 
@@ -110,7 +145,7 @@ public class frmChat extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         lbUsername = new javax.swing.JLabel();
-        menu_Left1 = new Conponents.menu_Left();
+        menuUser = new Conponents.menu_Left();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -227,7 +262,7 @@ public class frmChat extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(menu_Left1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(menuUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -250,13 +285,14 @@ public class frmChat extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(8, 8, 8)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(8, 8, 8)
                         .addComponent(chatbody, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(menu_Left1, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                    .addComponent(menuUser, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnFile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnImg, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
@@ -265,7 +301,7 @@ public class frmChat extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnSend, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(taBox, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE))
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -370,6 +406,7 @@ public class frmChat extends javax.swing.JFrame {
         }
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFile;
     private javax.swing.JButton btnImg;
@@ -384,7 +421,7 @@ public class frmChat extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lbUsername;
-    private Conponents.menu_Left menu_Left1;
+    private Conponents.menu_Left menuUser;
     private javax.swing.JTextField taBox;
     // End of variables declaration//GEN-END:variables
 
