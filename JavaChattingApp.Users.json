@@ -1,0 +1,108 @@
+[{
+  "_id": {
+    "$oid": "6526219ab238bc0711e76faf"
+  },
+  "username": "user1",
+  "email": "user1@example.com",
+  "password": "1",
+  "isOnline": false
+},
+{
+  "_id": {
+    "$oid": "6526219ab238bc0711e76fb0"
+  },
+  "username": "user2",
+  "email": "user2@example.com",
+  "password": "2",
+  "isOnline": false
+},
+{
+  "_id": {
+    "$oid": "6526219ab238bc0711e76fb1"
+  },
+  "username": "user3",
+  "email": "user3@example.com",
+  "password": "hashed_password_3",
+  "isOnline": false
+},
+{
+  "_id": {
+    "$oid": "6526219ab238bc0711e76fb2"
+  },
+  "username": "user4",
+  "email": "user4@example.com",
+  "password": "hashed_password_4",
+  "isOnline": false
+},
+{
+  "_id": {
+    "$oid": "6526219ab238bc0711e76fb3"
+  },
+  "username": "user5",
+  "email": "user5@example.com",
+  "password": "hashed_password_5",
+  "isOnline": false
+},
+{
+  "_id": {
+    "$oid": "6526219ab238bc0711e76fb4"
+  },
+  "username": "user6",
+  "email": "user6@example.com",
+  "password": "hashed_password_6",
+  "isOnline": false
+},
+{
+  "_id": {
+    "$oid": "6526219ab238bc0711e76fb5"
+  },
+  "username": "user7",
+  "email": "user7@example.com",
+  "password": "hashed_password_7",
+  "isOnline": false
+},
+{
+  "_id": {
+    "$oid": "6526219ab238bc0711e76fb6"
+  },
+  "username": "user8",
+  "email": "user8@example.com",
+  "password": "hashed_password_8",
+  "isOnline": false
+},
+{
+  "_id": {
+    "$oid": "6526219ab238bc0711e76fb7"
+  },
+  "username": "user9",
+  "email": "user9@example.com",
+  "password": "hashed_password_9",
+  "isOnline": false
+},
+{
+  "_id": {
+    "$oid": "6526219ab238bc0711e76fb8"
+  },
+  "username": "user10",
+  "email": "user10@example.com",
+  "password": "hashed_password_10",
+  "isOnline": false
+},
+{
+  "_id": {
+    "$oid": "65337b53c8362e6f3e51862f"
+  },
+  "username": "khoi2",
+  "email": "2@gmail.com",
+  "password": "1",
+  "isOnline": false
+},
+{
+  "_id": {
+    "$oid": "65337b7f955b217fd8e4b6b7"
+  },
+  "username": "khoi1",
+  "email": "1@gmail.com",
+  "password": "1",
+  "isOnline": false
+}]
